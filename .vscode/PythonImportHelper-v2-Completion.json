@@ -1,0 +1,100 @@
+[
+    {
+        "label": "io",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "io",
+        "description": "io",
+        "detail": "io",
+        "documentation": {}
+    },
+    {
+        "label": "cv2",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "cv2",
+        "description": "cv2",
+        "detail": "cv2",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "streamlit",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "streamlit",
+        "description": "streamlit",
+        "detail": "streamlit",
+        "documentation": {}
+    },
+    {
+        "label": "Image",
+        "importPath": "PIL",
+        "description": "PIL",
+        "isExtraImport": true,
+        "detail": "PIL",
+        "documentation": {}
+    },
+    {
+        "label": "image_to_array",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def image_to_array(file_to_open):\n    \"\"\"Load a Streamlit image into an array.\"\"\"\n    # Convert the uploaded file to a PIL image.\n    image = Image.open(file_to_open)\n    # Convert the image to an RGB NumPy array for processing.\n    image = image.convert(\"RGB\")\n    image = np.array(image)\n    return image\ndef denoise_image(image, algorithm, kernel_size):\n    \"\"\"Apply a denoising algorithm safely.\"\"\"",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "denoise_image",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def denoise_image(image, algorithm, kernel_size):\n    \"\"\"Apply a denoising algorithm safely.\"\"\"\n    # ---------- IMAGE SAFETY ----------\n    # Convert float images to uint8\n    if image.dtype != np.uint8:\n        image = np.clip(image, 0, 255).astype(np.uint8)\n    # Convert RGBA → RGB\n    if image.ndim == 3 and image.shape[2] == 4:\n        image = cv2.cvtColor(image, cv2.COLOR_RGBA2RGB)\n    # ---------- KERNEL SAFETY ----------",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "image_array_to_bytes",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def image_array_to_bytes(image_to_convert, file_format):\n    \"\"\"Given an image array, convert it to a bytes object.\"\"\"\n    # Converting NumPy array to PIL image in RGB mode\n    image_pil = Image.fromarray(image_to_convert)\n    # Creating a buffer to store the image data in the selected format\n    buf = io.BytesIO()\n    if file_format.upper() == \"JPG\":\n        file_format = \"JPEG\"\n    image_pil.save(buf, format=file_format)\n    byte_data = buf.getvalue()",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "uploaded_file",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "uploaded_file = st.file_uploader(\"Choose an image...\", type=[\"jpg\", \"jpeg\", \"png\"])\nalgorithm = st.selectbox(\n    \"Select noise reduction algorithm\",\n    (\n        \"Gaussian Blur Filter\",\n        \"Median Blur Filter\",\n        \"Minimum Blur Filter\",\n        \"Maximum Blur Filter\",\n        \"Non-local Means Filter\",\n    ),",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "algorithm",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "algorithm = st.selectbox(\n    \"Select noise reduction algorithm\",\n    (\n        \"Gaussian Blur Filter\",\n        \"Median Blur Filter\",\n        \"Minimum Blur Filter\",\n        \"Maximum Blur Filter\",\n        \"Non-local Means Filter\",\n    ),\n)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "kernel_size",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "kernel_size = st.slider(\"Select kernel size\", 1, 10, step=2)\nif uploaded_file is not None:\n    image = image_to_array(uploaded_file)\n    denoised_image = denoise_image(image, algorithm, kernel_size)\n    # Displaying the denoised image in RGB format\n    col1, col2 = st.columns(2)\n    with col1:\n        st.image(image, caption=\"Uploaded Image\", use_container_width=True)\n    with col2:\n        st.image(denoised_image, caption=\"Denoised Image\", use_container_width=True)",
+        "detail": "app",
+        "documentation": {}
+    }
+]
