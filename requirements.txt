@@ -2,3 +2,4 @@ streamlit
 opencv-python
 numpy
 pillow
+opencv-python-headless(WHLIE DEPLOYING ON EC2)
