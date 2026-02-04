@@ -1,14 +1,32 @@
-name: First CI
+name: Deploy to EC2 (dev)
 
-on: [push]
+on:
+  push:
+    branches:
+      - dev
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: dev
 
-      - name: Say Hello
-        run: echo "GitHub Actions is working"
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Connect to EC2 and run commands
+        run: |
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            cd /home/ubuntu/Image-noise-reduction
+            git checkout dev
+            git pull origin dev
+            echo "✅ Dev branch deployed successfully"
+          EOF
