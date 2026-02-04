@@ -8,3 +8,5 @@
   $ xcode-select --install
   $ pip install watchdog
             
+2026-02-04 16:30:37.131 Port 8501 is not available
+2026-02-04 16:32:51.749 Port 8501 is not available
