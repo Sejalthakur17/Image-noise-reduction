@@ -37,7 +37,6 @@ Users can upload an image, apply different noise reduction algorithms, preview r
 ├── app.py
 ├── README.md
 ├── requirements.txt
-# test deploy
-# test deploy
-# test deploy
-# test deploy
+├── .github/workflow
+├── streamlit.out
+├── requirements.txt
