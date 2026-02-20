@@ -44,6 +44,15 @@
         "documentation": {}
     },
     {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
         "label": "image_to_array",
         "kind": 2,
         "importPath": "app",
@@ -67,6 +76,15 @@
         "importPath": "app",
         "description": "app",
         "peekOfCode": "def image_array_to_bytes(image_to_convert, file_format):\n    \"\"\"Given an image array, convert it to a bytes object.\"\"\"\n    # Converting NumPy array to PIL image in RGB mode\n    image_pil = Image.fromarray(image_to_convert)\n    # Creating a buffer to store the image data in the selected format\n    buf = io.BytesIO()\n    if file_format.upper() == \"JPG\":\n        file_format = \"JPEG\"\n    image_pil.save(buf, format=file_format)\n    byte_data = buf.getvalue()",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "status_file",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "status_file = \"dev-status/status.txt\"\ndef image_to_array(file_to_open):\n    \"\"\"Load a Streamlit image into an array.\"\"\"\n    # Convert the uploaded file to a PIL image.\n    image = Image.open(file_to_open)\n    # Convert the image to an RGB NumPy array for processing.\n    image = image.convert(\"RGB\")\n    image = np.array(image)\n    return image\ndef denoise_image(image, algorithm, kernel_size):",
         "detail": "app",
         "documentation": {}
     },
