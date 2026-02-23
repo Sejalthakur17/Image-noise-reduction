@@ -1,4 +1,3 @@
-
 name: Deploy to EC2 (dev)
 
 on:
@@ -13,23 +12,32 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          ref: dev
 
       - name: Setup SSH
-        shell: bash
         run: |
-          mkdir -p $HOME/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > $HOME/.ssh/id_ed25519
-          chmod 600 $HOME/.ssh/id_ed25519
-          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> $HOME/.ssh/known_hosts
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-
-      - name: Connect to EC2 and run commands
+      - name: Deploy to EC2 via SSH
         run: |
           ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
             cd /home/ubuntu/Image-noise-reduction
+
+            echo "Pulling latest code..."
             git checkout dev
             git pull origin dev
-            echo "✅ Dev branch deployed successfully"
+
+            echo "Stopping old container..."
+            docker stop denoiser || true
+            docker rm denoiser || true
+
+            echo "Building Docker image..."
+            docker build -t streamlit-denoiser .
+
+            echo "Starting container..."
+            docker run -d -p 8501:8501 --name denoiser streamlit-denoiser
+
+            echo "✅ Deployment successful!"
           EOF
