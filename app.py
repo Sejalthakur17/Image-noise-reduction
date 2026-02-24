@@ -4,7 +4,9 @@ import cv2
 import numpy as np
 import streamlit as st
 from PIL import Image
+import os
 
+status_file = "dev-status/status.txt"
 
 def image_to_array(file_to_open):
     """Load a Streamlit image into an array."""
@@ -92,6 +94,13 @@ def image_array_to_bytes(image_to_convert, file_format):
 
 
 st.title("Noise Reduction App")
+
+if os.path.exists(status_file):
+    with open(status_file, "r") as f:
+        message = f.read().strip()
+    st.success(message)
+else:
+    st.warning("Dev status file not found")
 
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
