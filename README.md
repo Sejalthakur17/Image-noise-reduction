@@ -30,6 +30,8 @@ Users can upload an image, apply different noise reduction algorithms, preview r
 
 ---
 
+Base code from PythonGUIs tutorial; Docker and CI/CD setup by me.
+
 ## 📦 Project Structure
 
 ```text
